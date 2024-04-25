@@ -1,0 +1,2 @@
+nest new first-tutorial
+nest g module user         g for generate ... it generate module for us 
