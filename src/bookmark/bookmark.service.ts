@@ -33,7 +33,27 @@ export class BookmarkService {
     return bookmark;
   }
 
-  editBookmarksById(userId: number, bookmarkId: number, dto: EditBookmarkDto) {}
+  async editBookmarksById(
+    userId: number,
+    bookmarkId: number,
+    dto: EditBookmarkDto,
+  ) {
+    const editedBookmark = await this.prisma.bookmark.update({
+      where: { id: bookmarkId, userId },
+      data: {
+        ...dto,
+      },
+    });
+    return editedBookmark;
+  }
 
-  deleteBookmarksById(userId: number, bookmarkId: number) {}
+  async deleteBookmarksById(userId: number, bookmarkId: number) {
+    const deletedBookmark = await this.prisma.bookmark.delete({
+      where: {
+        id: bookmarkId,
+        userId,
+      },
+    });
+    return deletedBookmark;
+  }
 }

@@ -6,7 +6,7 @@ import { describe } from 'node:test';
 import * as pactum from 'pactum';
 import { AuthDto } from 'src/auth/dto';
 import { EditUserDto } from 'src/user/dto/edit-user.dto';
-import { CreateBookmarkDto } from 'src/bookmark/dto';
+import { CreateBookmarkDto, EditBookmarkDto } from 'src/bookmark/dto';
 describe('App e2e', () => {
   let app: INestApplication;
   let prisma: PrismaService;
@@ -187,7 +187,37 @@ describe('App e2e', () => {
           .expectBodyContains('$S{bookmarkId}');
       });
     });
-    describe('Edit Bookmark by id', () => {});
-    describe('Delete Bookmark by id', () => {});
+
+    describe('Edit Bookmark by id', () => {
+      describe('Edit Bookmark', () => {
+        const dto: EditBookmarkDto = {
+          title: 'edited Title',
+        };
+
+        it('should edit Bookmark', () => {
+          return pactum
+            .spec()
+            .patch('/bookmarks/{id}')
+            .withPathParams('id', '$S{bookmarkId}')
+            .withHeaders({
+              Authorization: 'Bearer $S{userAt}',
+            })
+            .withBody(dto)
+            .expectStatus(200);
+        });
+      });
+    });
+    describe('Delete Bookmark by id', () => {
+      it('Should delete bookmark', () => {
+        return pactum
+          .spec()
+          .delete('/bookmarks/{id}')
+          .withPathParams('id', '$S{bookmarkId}')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200);
+      });
+    });
   });
 });
