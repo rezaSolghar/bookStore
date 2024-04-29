@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
   Patch,
@@ -13,6 +14,7 @@ import { JwtGuard } from '../auth/guard';
 import { BookmarkService } from './bookmark.service';
 import { GetUser } from '../auth/decorator';
 import { CreateBookmarkDto, EditBookmarkDto } from './dto';
+import { STATUS_CODES } from 'node:http';
 
 @UseGuards(JwtGuard)
 @Controller('bookmarks')
@@ -47,7 +49,7 @@ export class BookmarkController {
   ) {
     return this.bookmarkService.editBookmarksById(userId, bookmarkId, dto);
   }
-
+  @HttpCode(204)
   @Delete(':id')
   deleteBookmarksById(
     @GetUser('id') userId: number,
